@@ -42,8 +42,8 @@ Token needs
 2. field that holds the literal value of the token, so we can reuse it later and the info whether a “number” token is a 5 or a 10 doesn’t get lost.
 */
 type Token struct {
-	Type    TokenType
-	Literal string
+	Type  TokenType
+	Value string
 }
 
 const (
