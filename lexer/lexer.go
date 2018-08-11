@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/komuw/khaled/token"
 )
@@ -27,6 +28,10 @@ func NewLexer(input string) *Lexer {
 
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
+
+	// eat whitespace, because it is of no use to khaled unlike python
+	replacer := strings.NewReplacer(string(' '), "", string('\t'), "", string('\n'), "", string('\r'), "")
+	l.input = replacer.Replace(l.input)
 
 	if l.position >= len(l.input) {
 		l.ch = 0
@@ -81,13 +86,6 @@ func (l *Lexer) NextToken() token.Token {
 // }
 // func isDigit(ch byte) bool {
 // 	return '0' <= ch && ch <= '9'
-// }
-
-// // eat whitespace, because it is of no use to khaled unlike python
-// func (l *Lexer) skipWhitespace() {
-// 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
-// 		l.readChar()
-// 	}
 // }
 
 /* readChar gives us the next character and advance our position in the input string.
