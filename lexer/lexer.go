@@ -53,7 +53,7 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LBRACE, l.ch)
 	case '}':
 		tok = newToken(token.RBRACE, l.ch)
-	case 0:
+	case 0: // ASCII code for the "NUL"
 		tok.Value = ""
 		tok.Type = token.EOF
 	}
