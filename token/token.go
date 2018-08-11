@@ -46,6 +46,11 @@ type Token struct {
 	Value string
 }
 
+// NewToken creates new token
+func NewToken(tokenType TokenType, ch byte) Token {
+	return Token{Type: tokenType, Value: string(ch)}
+}
+
 const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
@@ -70,3 +75,15 @@ const (
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
 )
+
+var keywords = map[string]TokenType{
+	"fn":  FUNCTION,
+	"let": LET,
+}
+
+func LookupIdent(ident string) TokenType {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return IDENT
+}
