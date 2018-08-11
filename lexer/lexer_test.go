@@ -90,10 +90,10 @@ func TestNextTokenExtened(t *testing.T) {
 	for _, v := range tests {
 		tok := l.NextToken()
 		if tok.Type != v.expectedType {
-			t.Fatalf("\n Tokentype wrong. \nCalled l.NextToken():%#+v  \ngot %#+v \nwanted %#+v", string(l.ch), tok.Type, v.expectedType)
+			t.Fatalf("\n Tokentype wrong. \nCalled l.NextToken():%#+v  \ngot %#+v \nwanted %#+v", string(l.Ch), tok.Type, v.expectedType)
 		}
 		if tok.Value != v.expectedValue {
-			t.Fatalf("\n Value wrong. \nCalled l.NextToken():%#+v \ngot %#+v \nwanted %#+v", string(l.ch), tok.Value, v.expectedValue)
+			t.Fatalf("\n Value wrong. \nCalled l.NextToken():%#+v \ngot %#+v \nwanted %#+v", string(l.Ch), tok.Value, v.expectedValue)
 		}
 	}
 }
