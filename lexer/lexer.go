@@ -17,7 +17,6 @@ type Lexer struct {
 
 func NewLexer(input string) *Lexer {
 	l := &Lexer{input: input}
-	// l.readChar()
 	return l
 }
 
@@ -35,6 +34,8 @@ func (l *Lexer) readChar() {
 func (l *Lexer) NextToken() token.Token {
 
 	var tok token.Token
+	l.readChar()
+
 	switch l.ch {
 	case '=':
 		tok = newToken(token.ASSIGN, l.ch)
@@ -56,7 +57,6 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Value = ""
 		tok.Type = token.EOF
 	}
-	l.readChar()
 	return tok
 }
 
