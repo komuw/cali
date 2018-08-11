@@ -3,8 +3,6 @@ package lexer
 import (
 	"fmt"
 
-	"github.com/sanity-io/litter"
-
 	"github.com/komuw/khaled/token"
 )
 
@@ -17,7 +15,7 @@ It will take source code as input and output the tokens that rep the source code
 type Lexer struct {
 	Input      string
 	Ch         byte   // current char under examination
-	Position   int    // position of ch
+	Position   int    // position of Ch
 	ByteStream []byte // value of Input as bytes
 	// readPosition int  // current reading position in input (after current char)
 
@@ -42,7 +40,6 @@ func (l *Lexer) skipWhiteSpace() {
 }
 
 func (l *Lexer) NextToken() token.Token {
-	litter.Dump("l1", l)
 	var tok token.Token
 	l.skipWhiteSpace()
 
@@ -54,11 +51,12 @@ func (l *Lexer) NextToken() token.Token {
 	*/
 	if l.Position >= len(l.Input) {
 		l.Ch = 0
+	} else {
+		l.Ch = l.Input[l.Position]
 	}
-
-	litter.Dump("l2", l)
 	fmt.Println("l.Ch", string(l.Ch))
 
+	// read current character; we'll advance at end
 	switch l.Ch {
 	case '=':
 		tok = token.NewToken(token.ASSIGN, l.Ch)
@@ -94,10 +92,9 @@ func (l *Lexer) NextToken() token.Token {
 	}
 
 	// advance
-	l.Position = l.Position + 1
-	l.Ch = l.Input[l.Position]
-
-	litter.Dump("l3", l)
+	if l.Position < len(l.Input) {
+		l.Position = l.Position + 1
+	}
 	return tok
 }
 
