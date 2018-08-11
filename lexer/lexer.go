@@ -29,10 +29,19 @@ func NewLexer(input string) *Lexer {
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
-	// eat whitespace, because it is of no use to khaled unlike python
+	/*
+		TODO: turn this to func
+		eat whitespace, because it is of no use to khaled unlike python
+	*/
 	replacer := strings.NewReplacer(string(' '), "", string('\t'), "", string('\n'), "", string('\r'), "")
 	l.input = replacer.Replace(l.input)
 
+	/*
+		TODO: tunr this to func
+		the lexer only supports ASCII characters instead of full Unicode. This lets us keep things simple.
+		To support Unicode/UTF-8 we would need to change l.ch from a byte to rune and change the way we read the
+		next characters, since they could be multiple bytes wide now. Using l.input[l.readPosition]wouldn’t work anymore
+	*/
 	if l.position >= len(l.input) {
 		l.ch = 0
 	} else {
@@ -86,20 +95,4 @@ func (l *Lexer) NextToken() token.Token {
 // }
 // func isDigit(ch byte) bool {
 // 	return '0' <= ch && ch <= '9'
-// }
-
-/* readChar gives us the next character and advance our position in the input string.
-
-the lexer only supports ASCII characters instead of full Unicode. This lets us keep things simple.
-To support Unicode/UTF-8 we would need to change l.ch from a byte to rune and change the way we read the
-next characters, since they could be multiple bytes wide now. Using l.input[l.readPosition]wouldn’t work anymore
-*/
-// func (l *Lexer) readChar() {
-// 	if l.readPosition >= len(l.input) {
-// 		l.ch = 0
-// 	} else {
-// 		l.ch = l.input[l.readPosition]
-// 	}
-// 	l.position = l.readPosition
-// 	l.readPosition += 1
 // }
