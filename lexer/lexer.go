@@ -20,7 +20,12 @@ func NewLexer(input string) *Lexer {
 	return l
 }
 
-// readChar gives us the next character and advance our position in the input string.
+/* readChar gives us the next character and advance our position in the input string.
+
+the lexer only supports ASCII characters instead of full Unicode. This lets us keep things simple.
+To support Unicode/UTF-8 we would need to change l.ch from a byte to rune and change the way we read the
+next characters, since they could be multiple bytes wide now. Using l.input[l.readPosition]wouldn’t work anymore
+*/
 func (l *Lexer) readChar() {
 	if l.readPosition >= len(l.input) {
 		l.ch = 0
