@@ -1,8 +1,8 @@
 ## khaled          
 
 
-khaled is a minimal interpreted language.           
-It's name is derived from record producer/DJ/record label executive; DJ Khaled.                                      
+khaled is an interpreted programming language.           
+It's name is derived from hip hop artiste; DJ Khaled.                                      
 
 **Contents:**          
 [Installation](#installation)   
