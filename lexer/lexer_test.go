@@ -108,7 +108,11 @@ func TestNextTokenPage21(t *testing.T) {
 	!-/*5;
 	5 < 10 > 5;
 
-	
+	if (5 < 10) {
+	return true;
+	} else {
+	return false;
+	}
 	`
 	tests := []struct {
 		expectedType  token.TokenType
@@ -126,6 +130,7 @@ func TestNextTokenPage21(t *testing.T) {
 		{token.GT, ">"},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
+
 		{token.EOF, ""},
 	}
 	l := NewLexer(input)
@@ -133,7 +138,7 @@ func TestNextTokenPage21(t *testing.T) {
 	for _, v := range tests {
 		tok := l.NextToken()
 		if tok.Type != v.expectedType {
-			t.Fatalf("\n Tokentype wrong. \nCalled l.NextToken() \ngot %#+v \nwanted %#+v", tok.Type, v.expectedType)
+			t.Fatalf("\n Tokentype wrong. \nCalled l.NextToken() \ngot type:%#+v of value:%#+v \nwanted %#+v", tok.Type, tok.Value, v.expectedType)
 		}
 		if tok.Value != v.expectedValue {
 			t.Fatalf("\n Value wrong. \nCalled l.NextToken() \ngot %#+v \nwanted %#+v", tok.Value, v.expectedValue)
