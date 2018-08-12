@@ -37,13 +37,37 @@ func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 	l.skipWhitespace()
 
+	switch l.ch {
 	/*
 		We look at the current character under
 		examination (l.ch) and return a token depending on which character it is.
 	*/
-	switch l.ch {
 	case '=':
-		tok = token.NewToken(token.ASSIGN, l.ch)
+		if l.peekChar() == '=' {
+			/*
+				we save l.ch in a local var before calling l.readChar() again
+				so don’t lose the current character and can safely advance the lexer so it leaves the NextToken()
+				with l.position and l.readPosition in the correct state.
+				If we wanted to support more two-character tokens in khaled, we should probably abstract the behaviour away in a method
+				called makeTwoCharToken that peeks and advances if it found the right token.
+			*/
+			ch := l.ch
+			l.readChar()
+			value := string(ch) + string(l.ch)
+			tok = token.Token{Type: token.EQ, Value: value}
+		} else {
+			tok = token.NewToken(token.ASSIGN, l.ch)
+		}
+	case '!':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			value := string(ch) + string(l.ch)
+			tok = token.Token{Type: token.NOT_EQ, Value: value}
+		} else {
+
+			tok = token.NewToken(token.BANG, l.ch)
+		}
 	case ';':
 		tok = token.NewToken(token.SEMICOLON, l.ch)
 	case '(':
@@ -60,8 +84,6 @@ func (l *Lexer) NextToken() token.Token {
 		tok = token.NewToken(token.RBRACE, l.ch)
 	case '-':
 		tok = token.NewToken(token.MINUS, l.ch)
-	case '!':
-		tok = token.NewToken(token.BANG, l.ch)
 	case '/':
 		tok = token.NewToken(token.SLASH, l.ch)
 	case '*':
@@ -160,4 +182,26 @@ func (l *Lexer) readNumber() string {
 }
 func isDigit(ch byte) bool {
 	return '0' <= ch && ch <= '9'
+}
+
+/*
+We want to support tokens like == and !=
+We can just add a new case in the switch statement inside NextToken() because
+We can’t compare our l.ch byte with strings like "==" ie in Go "==" is a string whereas l.ch is a byte
+What we can do instead is to reuse the existing branches for '=' and '!' and extend them.
+So wel'll look ahead in the input and then determine whether to return a token for = or == etc
+
+peekChar() is similar to readChar(), except that it doesn’t increment l.position and l.readPosition.
+We only want to peek/look ahead in the input and not move around in it, so we know what a call to readChar() would return.
+Most lexers/parser have such a peek function that looks ahead and most of the time it only returns the immediately next character.
+Some even look behind, and some u have to look ahead/behind for more than one char.
+
+An example of a lookAhead func in a real lexer/parser: https://github.com/Shopify/liquid/pull/235/files#diff-1b4fb3f28c5e976e2074edc03f6cb16cR41
+*/
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
 }

@@ -68,6 +68,8 @@ const (
 	SLASH    = "/"
 	LT       = "<"
 	GT       = ">"
+	EQ       = "==" // EQ and NOT_EQ require the use of lookAhead
+	NOT_EQ   = "!="
 
 	// Delimiters
 	COMMA     = ","
