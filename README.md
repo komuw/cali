@@ -4,7 +4,7 @@
 khaled is an interpreted programming language.           
 It's name is derived from hip hop artiste; DJ Khaled.                      
 
-Implemented as I was reading;  [Writing An Interpreter In Go - by Thorsten Ball.](https://interpreterbook.com/)   
+Implemented as I was reading; [Writing An Interpreter In Go - by Thorsten Ball.](https://interpreterbook.com/)   
 That book is worth every penny.             
 
 khaled ships with an inbuilt REPL, which you can start by typing;             
