@@ -24,7 +24,7 @@ You can type in commands
 [2. Lexer](2.Lexing.md)  
 
 
-###### TODO:
+##### TODO:
 - [ ] Implement the ideas in this talk: [Lexical Scanning in Go by Rob Pike](https://www.youtube.com/watch?v=HxaD_trXwRE) especially;
   - [ ] using int as TokenType
   - [ ] lexing and parsing concurrently(run lexer in one goroutine and parser in another communicating over a channel)
