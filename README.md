@@ -28,3 +28,4 @@ You can type in commands
 - [ ] Implement the ideas in this talk: [Lexical Scanning in Go by Rob Pike](https://www.youtube.com/watch?v=HxaD_trXwRE) especially;
   - [ ] using int as TokenType
   - [ ] lexing and parsing concurrently(run lexer in one goroutine and parser in another communicating over a channel)
+- [ ] Better error messages with filename and lineNumbers(etc) where errors (in the source code) occured.
