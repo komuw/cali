@@ -52,7 +52,7 @@ Example of LetStatement struct for; let x = 5;
 		Token: token.Token{Type: "LET", Value: "let"},
 		Name: &ast.Identifier{
 			Token: token.Token{Type: "IDENT", Value: "x", }, Value: "x"},
-		Value: nil,
+		Value: nil, // TODO: update this to reflect that Value should be 5 when we start parsing INTs
 	}
 */
 type LetStatement struct {
