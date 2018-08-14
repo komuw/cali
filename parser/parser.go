@@ -12,7 +12,7 @@ type Parser struct {
 	peekToken token.Token
 }
 
-func New(l *lexer.Lexer) *Parser {
+func NewParser(l *lexer.Lexer) *Parser {
 	p := &Parser{l: l}
 	// Read two tokens, so curToken and peekToken are both set
 	p.nextToken()

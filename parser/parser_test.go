@@ -12,7 +12,7 @@ func TestLetStatementsSimple(t *testing.T) {
 let x = 5;
 `
 	l := lexer.NewLexer(input)
-	p := New(l)
+	p := NewParser(l)
 	program := p.ParseProgram()
 
 	if program == nil {
@@ -40,7 +40,7 @@ let y = 10;
 let foobar = 838383;
 `
 	l := lexer.NewLexer(input)
-	p := New(l)
+	p := NewParser(l)
 	program := p.ParseProgram()
 
 	if program == nil {
