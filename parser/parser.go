@@ -6,6 +6,12 @@ import (
 	"github.com/komuw/khaled/token"
 )
 
+/*
+curToken & peekToken do same job like the position and readPosition fields we had in the lexer.
+They point to the current and the next token.
+Think of a single line only containing 5;. Then curToken is a token.INT and we need peekToken to decide whether
+we are at the end of the line or if we are at just the start of an arithmetic expression
+*/
 type Parser struct {
 	l         *lexer.Lexer
 	curToken  token.Token
@@ -27,6 +33,7 @@ func (p *Parser) nextToken() {
 func (p *Parser) ParseProgram() *ast.Program {
 	program := &ast.Program{}
 	program.Statements = []ast.Statement{}
+
 	for p.curToken.Type != token.EOF {
 		stmt := p.parseStatement()
 		if stmt != nil {
@@ -70,9 +77,7 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 func (p *Parser) curTokenIs(t token.TokenType) bool {
 	return p.curToken.Type == t
 }
-func (p *Parser) peekTokenIs(t token.TokenType) bool {
-	return p.peekToken.Type == t
-}
+
 func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
 		p.nextToken()
@@ -80,4 +85,7 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 	} else {
 		return false
 	}
+}
+func (p *Parser) peekTokenIs(t token.TokenType) bool {
+	return p.peekToken.Type == t
 }

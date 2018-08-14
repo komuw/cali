@@ -51,7 +51,8 @@ Example of LetStatement struct for; let x = 5;
 	&ast.LetStatement{
 		Token: token.Token{Type: "LET", Value: "let"},
 		Name: &ast.Identifier{
-			Token: token.Token{Type: "IDENT", Value: "x", }, Value: "x"},
+			Token: token.Token{Type: "IDENT", Value: "x", },
+			Value: "x"},
 		Value: nil, // TODO: update this to reflect that Value should be 5 when we start parsing INTs
 	}
 */
@@ -61,7 +62,10 @@ type LetStatement struct {
 	Value Expression
 }
 
+// statementNode satisfies the Statement interface
 func (ls *LetStatement) statementNode() {}
+
+// TokenValue satisfies the Node interface
 func (ls *LetStatement) TokenValue() string {
 	return ls.Token.Value
 }
@@ -73,16 +77,22 @@ It has fields;
 1. one for the identifer(x) token
 2. one for the expression(5)
 
-Hower in `let x = 5;` 5 is not an expression it is a statement ****
-TODO: come back here.
+Example of Identifier struct for; let x = 5;
+	&ast.Identifier{
+			Token: token.Token{Type: "IDENT", Value: "x", },
+			Value: "x"
+		}
 */
 type Identifier struct {
 	Token token.Token // the token.IDENT token
 	Value string      //
 }
 
-func (i *Identifier) expressionNode()      {}
-func (i *Identifier) TokenLiteral() string { return i.Token.Value }
+// expressionNode implements the Expression interface
+func (i *Identifier) expressionNode() {}
+
+// TokenValue implements the Node interface
+func (i *Identifier) TokenValue() string { return i.Token.Value }
 
 /*
 let x = 5;

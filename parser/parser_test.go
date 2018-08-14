@@ -66,7 +66,7 @@ let foobar = 838383;
 
 func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 	if s.TokenValue() != "let" {
-		t.Errorf("s.TokenLiteral not 'let'. got=%q", s.TokenValue())
+		t.Errorf("s.TokenValue not 'let'. got=%q", s.TokenValue())
 		return false
 	}
 	letStmt, ok := s.(*ast.LetStatement)
@@ -78,9 +78,9 @@ func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 		t.Errorf("letStmt.Name.Value not '%s'. got=%s", name, letStmt.Name.Value)
 		return false
 	}
-	if letStmt.Name.TokenLiteral() != name {
-		t.Errorf("letStmt.Name.TokenLiteral() not '%s'. got=%s",
-			name, letStmt.Name.TokenLiteral())
+	if letStmt.Name.TokenValue() != name {
+		t.Errorf("letStmt.Name.TokenValue() not '%s'. got=%s",
+			name, letStmt.Name.TokenValue())
 		return false
 	}
 	return true
