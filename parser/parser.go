@@ -89,9 +89,7 @@ parseLetStatement:
 func (p *Parser) parseLetStatement() *ast.LetStatement {
 	stmt := &ast.LetStatement{Token: p.curToken}
 	if !p.expectPeek(token.IDENT) {
-		/*
-			if we get an UNexpected next token, we should raise a parseError(eg let = 5)
-		*/
+		// if we get an UNexpected next token, we parseError, we do that in expectPeek()
 		return nil
 	}
 	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Value}
