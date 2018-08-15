@@ -55,6 +55,15 @@ Example of LetStatement struct for; let x = 5;
 			Value: "x"},
 		Value: nil, // TODO: update this to reflect that Value should be 5 when we start parsing INTs
 	}
+
+let x = 5;
+can be represented by an AST like;
+				*ast.Program
+				Statements
+					|
+				*ast.LetStatement
+*ast.Identifier <--  Name
+					Value --> *ast.Expression
 */
 type LetStatement struct {
 	Token token.Token // the token.LET token
@@ -95,13 +104,16 @@ func (i *Identifier) expressionNode() {}
 func (i *Identifier) TokenValue() string { return i.Token.Value }
 
 /*
-let x = 5;
-can be represented by an AST like;
+ReturnStatement implements Statement interface
 
-					*ast.Program
-					Statements
-						|
-					*ast.LetStatement
-	*ast.Identifier <--  Name
-						Value --> *ast.Expression
+return 5;
+looks lik;
+return <expression>;
 */
+type ReturnStatement struct {
+	Token       token.Token // token.RETURN
+	ReturnValue Expression
+}
+
+func (rs *ReturnStatement) statementNode()     {}
+func (rs *ReturnStatement) TokenValue() string { return rs.Token.Value }
