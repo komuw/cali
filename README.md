@@ -29,4 +29,4 @@ You can type in commands
   - [ ] using int as TokenType
   - [ ] lexing and parsing concurrently(run lexer in one goroutine and parser in another communicating over a channel)
 - [ ] Better error messages with filename and lineNumbers(etc) where errors (in the source code) occured.
-- [ ] cache. source code. Hash source code input and generated ast, if someone sends same input, get ast straight from map and skip parsing stage.
+- [ ] cache source code. Hash source code input and generated ast, if someone sends same input, get ast straight from map and skip parsing stage.
