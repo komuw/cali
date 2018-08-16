@@ -9,6 +9,41 @@ import (
 )
 
 /*
+constants showing operator precendence of khaled language.
+
+These constants let us answer:
+does the * operator have a higher precedence than the == operator? etc
+*/
+const (
+	// _             int = iota
+	OpLowest       int = iota
+	OpEqualsEquals     // ==
+	OpLessGreater      // > or <
+	OpPlus             // +
+	OpMultiplier       // *
+	OpPrefix           // -X or !X
+	OpCall             // myFunction(X)
+)
+
+/*
+A Pratt parser’s main idea is the association of parsing funcs with token types.
+Each token type can have up to two parsing funcs associated with it, depending on whether the
+token is found in a prefix or an infix position.
+
+the infixParseFn takes an argument: another ast.Expression.
+This arg is the left-side of the infix operator that’s being parsed.
+
+All of our parsing funcs, prefixParseFn/infixParseFn, are going to follow this protocol:
+start with curToken being the type of token you’re associated with and return with curToken being the last token that’s part of your
+expression type.
+Never advance the tokens too far
+*/
+type (
+	prefixParseFn func() ast.Expression
+	infixParseFn  func(ast.Expression) ast.Expression
+)
+
+/*
 curToken & peekToken do same job like the position and readPosition fields we had in the lexer.
 They point to the current and the next token.
 Think of a single line only containing 5;. Then curToken is a token.INT and we need peekToken to decide whether
@@ -19,6 +54,9 @@ type Parser struct {
 	curToken  token.Token
 	peekToken token.Token
 	errors    []string
+
+	prefixParseFns map[token.TokenType]prefixParseFn
+	infixParseFns  map[token.TokenType]infixParseFn
 }
 
 func NewParser(l *lexer.Lexer) *Parser {
@@ -26,6 +64,13 @@ func NewParser(l *lexer.Lexer) *Parser {
 	// Read two tokens, so curToken and peekToken are both set
 	p.nextToken()
 	p.nextToken()
+
+	/*
+		create prefixParseFns map and register funcs for various tokens.
+		if we encounter a type token.IDENT the parsing function to call is p.parseIdentifier
+	*/
+	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
+	p.prefixParseFns[token.IDENT] = p.parseIdentifier // equivalent to p.registerPrefix(token.IDENT, p.parseIdentifier)
 	return p
 }
 func (p *Parser) Errors() []string {
@@ -35,6 +80,13 @@ func (p *Parser) peekError(t token.TokenType) {
 	// TODO: add line numbers to this errors
 	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
+}
+
+func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
+	p.prefixParseFns[tokenType] = fn
+}
+func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
+	p.infixParseFns[tokenType] = fn
 }
 
 func (p *Parser) nextToken() {
@@ -68,15 +120,15 @@ func (p *Parser) ParseProgram() *ast.Program {
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	/*
-		We are currently only parsing LET statements.
-		We are for example not parsing value like int(5), we'll do that later.
+		Since the only two real statement types in khaled are let and return statements
+		create a case for them, else parseExpression.
 	*/
 	case token.LET:
 		return p.parseLetStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
 	default:
-		return nil
+		return p.parseExpressionStatement()
 	}
 }
 
@@ -138,4 +190,43 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 		p.nextToken()
 	}
 	return stmt
+}
+
+/*
+parseExpressionStatement parses expressions
+*/
+func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+	stmt := &ast.ExpressionStatement{Token: p.curToken}
+	stmt.Expression = p.parseExpression(OpLowest)
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+/*
+parseExpression checks whether we have a parsing function associated with p.curToken.Type in the prefix position.
+If we do, it calls this parsing function, else returns nil.
+*/
+func (p *Parser) parseExpression(precedence int) ast.Expression {
+	prefix := p.prefixParseFns[p.curToken.Type]
+	if prefix == nil {
+		return nil
+	}
+	leftExp := prefix()
+	return leftExp
+}
+
+/*
+parseIdentifier returns a *ast.Identifier with the current
+token in the Token field & value of the token in Value.
+
+It doesn’t advance the tokens, it doesn’t call nextToken.
+All of our parsing funcs, prefixParseFn/infixParseFn, are going to follow this protocol:
+start with curToken being the type of token you’re associated with and return with curToken being the last token that’s part of your
+expression type.
+Never advance the tokens too far
+*/
+func (p *Parser) parseIdentifier() ast.Expression {
+	return &ast.Identifier{Token: p.curToken, Value: p.curToken.Value}
 }

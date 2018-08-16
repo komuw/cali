@@ -1,6 +1,10 @@
 package ast
 
-import "github.com/komuw/khaled/token"
+import (
+	"bytes"
+
+	"github.com/komuw/khaled/token"
+)
 
 /*
  Every node in our AST has to implement the Node interface.
@@ -8,6 +12,7 @@ import "github.com/komuw/khaled/token"
 */
 type Node interface {
 	TokenValue() string
+	String() string // makes debugging easy
 }
 
 type Statement interface {
@@ -35,6 +40,13 @@ func (p *Program) TokenValue() string {
 	} else {
 		return ""
 	}
+}
+func (p *Program) String() string {
+	var out bytes.Buffer
+	for _, s := range p.Statements {
+		out.WriteString(s.String())
+	}
+	return out.String()
 }
 
 /*
@@ -78,6 +90,17 @@ func (ls *LetStatement) statementNode() {}
 func (ls *LetStatement) TokenValue() string {
 	return ls.Token.Value
 }
+func (ls *LetStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(ls.TokenValue() + " ")
+	out.WriteString(ls.Name.String())
+	out.WriteString(" = ")
+	if ls.Value != nil {
+		out.WriteString(ls.Value.String())
+	}
+	out.WriteString(";")
+	return out.String()
+}
 
 /*
 Identifier implements the Expression interface
@@ -102,6 +125,9 @@ func (i *Identifier) expressionNode() {}
 
 // TokenValue implements the Node interface
 func (i *Identifier) TokenValue() string { return i.Token.Value }
+func (i *Identifier) String() string {
+	return i.Value
+}
 
 /*
 ReturnStatement implements Statement interface
@@ -117,3 +143,35 @@ type ReturnStatement struct {
 
 func (rs *ReturnStatement) statementNode()     {}
 func (rs *ReturnStatement) TokenValue() string { return rs.Token.Value }
+func (rs *ReturnStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(rs.TokenValue() + " ")
+	if rs.ReturnValue != nil {
+		out.WriteString(rs.ReturnValue.String())
+	}
+	out.WriteString(";")
+	return out.String()
+}
+
+/*
+ExpressionStatement implements the Statement interface
+It is used to represent an expression statement like:
+  x + 10;
+
+The reason we ExpressionStatement satisfying Statement interface is because,
+Program node is the root node of any AST. And Program.Statements takes a slice of Statement Nodes
+Since we would want Expressions to be added to []Statements, they need to satisfy Statement interface
+*/
+type ExpressionStatement struct {
+	Token      token.Token // the first token of the expression
+	Expression Expression  // holds the expression
+}
+
+func (es *ExpressionStatement) statementNode()     {}
+func (es *ExpressionStatement) TokenValue() string { return es.Token.Value }
+func (es *ExpressionStatement) String() string {
+	if es.Expression != nil {
+		return es.Expression.String()
+	}
+	return ""
+}
