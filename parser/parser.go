@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/komuw/khaled/ast"
 	"github.com/komuw/khaled/lexer"
@@ -13,9 +14,9 @@ constants showing operator precendence of khaled language.
 
 These constants let us answer:
 does the * operator have a higher precedence than the == operator? etc
+OpLowest is int 0, OpEqualsEquals is int 1 etc
 */
 const (
-	// _             int = iota
 	OpLowest       int = iota
 	OpEqualsEquals     // ==
 	OpLessGreater      // > or <
@@ -71,6 +72,7 @@ func NewParser(l *lexer.Lexer) *Parser {
 	*/
 	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 	p.prefixParseFns[token.IDENT] = p.parseIdentifier // equivalent to p.registerPrefix(token.IDENT, p.parseIdentifier)
+	p.prefixParseFns[token.INT] = p.parseIntegerLiteral
 	return p
 }
 func (p *Parser) Errors() []string {
@@ -229,4 +231,16 @@ Never advance the tokens too far
 */
 func (p *Parser) parseIdentifier() ast.Expression {
 	return &ast.Identifier{Token: p.curToken, Value: p.curToken.Value}
+}
+
+func (p *Parser) parseIntegerLiteral() ast.Expression {
+	lit := &ast.IntegerLiteral{Token: p.curToken}
+	value, err := strconv.ParseInt(p.curToken.Value, 0, 64)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as integer", p.curToken.Value)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = value
+	return lit
 }

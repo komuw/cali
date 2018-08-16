@@ -175,3 +175,17 @@ func (es *ExpressionStatement) String() string {
 	}
 	return ""
 }
+
+/*
+IntegerLiteral satisfies Expression interface.
+Value is an int64 and not a string.
+This is the field containing the actual value the integer literal represents.
+*/
+type IntegerLiteral struct {
+	Token token.Token
+	Value int64
+}
+
+func (il *IntegerLiteral) expressionNode()    {}
+func (il *IntegerLiteral) TokenValue() string { return il.Token.Value }
+func (il *IntegerLiteral) String() string     { return il.Token.Value }
