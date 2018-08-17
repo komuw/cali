@@ -201,7 +201,11 @@ func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	stmt := &ast.ExpressionStatement{Token: p.curToken}
 	stmt.Expression = p.parseExpression(OpLowest)
 
-	if p.peekTokenIs(token.SEMICOLON) {
+	/*
+		Unlike in the interpreter book, in khaled we stop on finding semicolon.
+		In khaled we wont allow code like; 5+5 (it has to be 5+5;)
+	*/
+	if p.peekTokenIs(token.SEMICOLON) && !p.curTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
 	return stmt
