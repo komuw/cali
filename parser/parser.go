@@ -241,6 +241,10 @@ func (p *Parser) parseIdentifier() ast.Expression {
 	return &ast.Identifier{Token: p.curToken, Value: p.curToken.Value}
 }
 
+/*
+parseIntegerLiteral() like parseIdentifier is strikingly simple. The only thing that’s really different
+is a call to strconv.ParseInt, which converts the string in p.curToken.Value into an int64.
+*/
 func (p *Parser) parseIntegerLiteral() ast.Expression {
 	lit := &ast.IntegerLiteral{Token: p.curToken}
 	value, err := strconv.ParseInt(p.curToken.Value, 0, 64)
