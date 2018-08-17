@@ -221,6 +221,7 @@ If we do, it calls this parsing function, else returns nil.
 func (p *Parser) parseExpression(precedence int) ast.Expression {
 	prefix := p.prefixParseFns[p.curToken.Type]
 	if prefix == nil {
+		// We didn't find a prefixParse func defined for that token.
 		return nil
 	}
 	leftExp := prefix()
