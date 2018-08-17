@@ -191,6 +191,25 @@ func TestIdentifierExpression(t *testing.T) {
 	}
 }
 
+func TestIdentifierExpressionParseError(t *testing.T) {
+	input := "foobar"
+	l := lexer.NewLexer(input)
+	p := NewParser(l)
+	_ = p.ParseProgram()
+
+	errors := p.Errors()
+	if len(errors) == 0 {
+		t.Fatalf("\n No errors found. \ngot %#+v \nwanted %#+v", len(errors), 1)
+	}
+	if len(errors) != 1 {
+		t.Fatalf("\n number of errors mismatch. \ngot %#+v \nwanted %#+v", len(errors), 1)
+	}
+	t.Logf("parser has %d errors", len(errors))
+	for _, msg := range errors {
+		t.Logf("parser error: %q", msg)
+	}
+}
+
 func TestIntegerLiteralExpression(t *testing.T) {
 	/*
 		other examples are;
