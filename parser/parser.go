@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/komuw/khaled/ast"
-	"github.com/komuw/khaled/lexer"
-	"github.com/komuw/khaled/token"
+	"github.com/komuw/cali/ast"
+	"github.com/komuw/cali/lexer"
+	"github.com/komuw/cali/token"
 )
 
 /*
-constants showing operator precendence of khaled language.
+constants showing operator precendence of cali language.
 
 These constants let us answer:
 does the * operator have a higher precedence than the == operator? etc
@@ -122,7 +122,7 @@ func (p *Parser) ParseProgram() *ast.Program {
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	/*
-		Since the only two real statement types in khaled are let and return statements
+		Since the only two real statement types in cali are let and return statements
 		create a case for them, else parseExpression.
 	*/
 	case token.LET:
@@ -202,8 +202,8 @@ func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	stmt.Expression = p.parseExpression(OpLowest)
 
 	/*
-		Unlike in the interpreter book, in khaled we stop on finding semicolon.
-		In khaled we wont allow code like; 5+5 (it has to be 5+5;)
+		Unlike in the interpreter book, in cali we stop on finding semicolon.
+		In cali we wont allow code like; 5+5 (it has to be 5+5;)
 	*/
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()

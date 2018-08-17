@@ -3,8 +3,8 @@ package parser
 import (
 	"testing"
 
-	"github.com/komuw/khaled/ast"
-	"github.com/komuw/khaled/lexer"
+	"github.com/komuw/cali/ast"
+	"github.com/komuw/cali/lexer"
 )
 
 /*
