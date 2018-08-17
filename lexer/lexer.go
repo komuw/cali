@@ -1,7 +1,7 @@
 package lexer
 
 import (
-	"github.com/komuw/khaled/token"
+	"github.com/komuw/cali/token"
 )
 
 /*
@@ -48,7 +48,7 @@ func (l *Lexer) NextToken() token.Token {
 				we save l.ch in a local var before calling l.readChar() again
 				so don’t lose the current character and can safely advance the lexer so it leaves the NextToken()
 				with l.position and l.readPosition in the correct state.
-				If we wanted to support more two-character tokens in khaled, we should probably abstract the behaviour away in a method
+				If we wanted to support more two-character tokens in cali, we should probably abstract the behaviour away in a method
 				called makeTwoCharToken that peeks and advances if it found the right token.
 			*/
 			ch := l.ch
@@ -151,14 +151,14 @@ func (l *Lexer) readIdentifier() string {
 
 func isLetter(ch byte) bool {
 	/*
-		In khaled we treat _ as a letter and allow it in identifiers and keywords.
+		In cali we treat _ as a letter and allow it in identifiers and keywords.
 		That means we can have var names like foo_bar. If you want to allow other chars in ua lang; add them here.
 	*/
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 }
 
 /*
-eat whitespace. khaled doesnt require it unlike python.
+eat whitespace. cali doesnt require it unlike python.
 This func is found in a lot of parsers. Sometimes it’s called eatWhitespace/consumeWhitespace.
 Which chars these functions actually skip depends on the language being lexed.
 */
@@ -171,7 +171,7 @@ func (l *Lexer) skipWhitespace() {
 
 /*
 We only read intergers. What about floats,hex notation, Octal notation?
-We ignore em and say khaled doesn't support them.
+We ignore em and say cali doesn't support them.
 */
 func (l *Lexer) readNumber() string {
 	position := l.position

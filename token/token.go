@@ -22,7 +22,7 @@ Source-code       ------------------------------>   Tokens   ---------------> AS
 what exactly constitutes a "token" varies between different lexer implementations.
 A production-ready lexer might also attach the line number, column number and filename to
 a token. A reason may be so that we can output useful error messages in the parsing stage:
-  "error: expected semicolon token. line 42, column 23, program.khaled"
+  "error: expected semicolon token. line 42, column 23, program.cali"
 
 2. Define tokens
 	let five = 5; //1. numbers like 5

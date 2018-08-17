@@ -3,7 +3,7 @@ package ast
 import (
 	"bytes"
 
-	"github.com/komuw/khaled/token"
+	"github.com/komuw/cali/token"
 )
 
 /*
