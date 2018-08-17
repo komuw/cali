@@ -3,9 +3,9 @@ package parser
 import (
 	"fmt"
 
-	"github.com/komuw/khaled/ast"
-	"github.com/komuw/khaled/lexer"
-	"github.com/komuw/khaled/token"
+	"github.com/komuw/cali/ast"
+	"github.com/komuw/cali/lexer"
+	"github.com/komuw/cali/token"
 )
 
 /*

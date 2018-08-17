@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/komuw/khaled/token"
+	"github.com/komuw/cali/token"
 )
 
 func TestNextTokenSimple(t *testing.T) {
@@ -100,7 +100,7 @@ func TestNextTokenExtened(t *testing.T) {
 
 func TestNextTokenPage21(t *testing.T) {
 	/*
-		the input looks like khaled source code, with gibberish like !-/*5.
+		the input looks like cali source code, with gibberish like !-/*5.
 		That’s okay. The lexer’s job is not to tell us whether code makes sense.
 		The lexer should only turn this input into tokens.
 	*/

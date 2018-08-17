@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/komuw/khaled/token"
+import "github.com/komuw/cali/token"
 
 /*
  Every node in our AST has to implement the Node interface.
