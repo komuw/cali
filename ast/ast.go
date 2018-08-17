@@ -158,9 +158,9 @@ ExpressionStatement implements the Statement interface
 It is used to represent an expression statement like:
   x + 10;
 
-The reason we ExpressionStatement satisfying Statement interface is because,
+The reason we have ExpressionStatement satisfying Statement interface is because,
 Program node is the root node of any AST. And Program.Statements takes a slice of Statement Nodes
-Since we would want Expressions to be added to []Statements, they need to satisfy Statement interface
+Since we would want Expressions to be added to []Statements, they need to satisfy Statement interface.
 */
 type ExpressionStatement struct {
 	Token      token.Token // the first token of the expression

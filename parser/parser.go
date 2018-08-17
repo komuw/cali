@@ -37,7 +37,7 @@ This arg is the left-side of the infix operator that’s being parsed.
 All of our parsing funcs, prefixParseFn/infixParseFn, are going to follow this protocol:
 start with curToken being the type of token you’re associated with and return with curToken being the last token that’s part of your
 expression type.
-Never advance the tokens too far
+Never advance the tokens too far.
 */
 type (
 	prefixParseFn func() ast.Expression
@@ -200,6 +200,7 @@ parseExpressionStatement parses expressions
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	stmt := &ast.ExpressionStatement{Token: p.curToken}
 	stmt.Expression = p.parseExpression(OpLowest)
+
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
